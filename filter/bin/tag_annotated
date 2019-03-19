@@ -1,0 +1,26 @@
+#!/bin/sh
+
+test_annotated_tag () {
+    API_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/git/$GITHUB_REF"
+    echo "Querying $API_URL..."
+
+    API_RESPONSE=$(curl -s $API_URL | jq -j .object.type)
+
+    case "$API_RESPONSE" in
+      tag)
+        echo "$GITHUB_REF is an annotated tag"
+        exit 0
+        ;;
+      commit)
+        echo "$GITHUB_REF is not an annotated tag"
+        exit 78
+        ;;
+      *)
+        echo "Unknown Git object type '$API_RESPONSE'"
+        exit 1
+        ;;
+    esac
+}
+
+PATTERN="refs/tags/${1:-*}"
+ref "$PATTERN" && test_annotated_tag

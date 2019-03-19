@@ -2,7 +2,7 @@ FROM debian:stable-slim
 
 LABEL "name"="filter"
 LABEL "maintainer"="GitHub Actions <support+actions@github.com>"
-LABEL "version"="1.1.0"
+LABEL "version"="1.1.1"
 
 LABEL "com.github.actions.name"="Filters for GitHub Actions"
 LABEL "com.github.actions.description"="Common filters to stop workflows"
@@ -13,8 +13,10 @@ COPY LICENSE README.md THIRD_PARTY_NOTICE.md /
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
+        ca-certificates \
+        curl \
         jq && \
-	apt-get clean -y && \
+    apt-get clean -y && \
     rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/usr/local/bin:${PATH}"
